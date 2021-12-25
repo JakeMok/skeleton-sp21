@@ -137,6 +137,19 @@ public class Model extends Observable {
      *  Empty spaces are stored as null.
      * */
     public static boolean emptySpaceExists(Board b) {
+        int size = b.size();
+       // System.out.println(size);
+        for (int i = 0; i < size; i = i + 1){
+            //System.out.println(i);
+            for (int x = 0; x < 4; x = x + 1){
+                if (b.tile(i, x) == null){
+                    return true;
+                }
+            }
+
+
+        }
+
         // TODO: Fill in this function.
         return false;
     }
@@ -147,7 +160,17 @@ public class Model extends Observable {
      * given a Tile object t, we get its value with t.value().
      */
     public static boolean maxTileExists(Board b) {
-        // TODO: Fill in this function.
+        int size = b.size();
+        for (int i = 0; i < size; i = i + 1) {
+            for (int x = 0; x < 4; x = x + 1) {
+                if (b.tile(i, x) == null){
+                    continue;
+                }
+                else if (b.tile(i, x).value() == MAX_PIECE) {
+                    return true;
+                }
+            }
+        }
         return false;
     }
 
@@ -159,6 +182,91 @@ public class Model extends Observable {
      */
     public static boolean atLeastOneMoveExists(Board b) {
         // TODO: Fill in this function.
+        if (emptySpaceExists(b)){
+            return true;
+        }
+        int size = b.size();
+        // System.out.println(size);
+        for (int i = 0; i < size; i = i + 1) {
+            //row ^^
+            //System.out.println(i);
+            for (int x = 0; x < 4; x = x + 1) {
+                //column ^^
+                int testval = b.tile(x, i).value();
+                if (i == 0) {
+                    if (x == 0) {
+                        int rightval = b.tile(x + 1, i).value();
+                        int bottomval = b.tile(x, i + 1).value();
+                        if (rightval == testval || bottomval == testval) {
+                            return true;
+                        }
+                    } else if (x == 3) {
+                        int bottomval = b.tile(x, i + 1).value();
+                        int leftval = b.tile(x - 1, i).value();
+                        if (leftval == testval || bottomval == testval) { //Only have to test bottom value or top I guess?
+                            return true;
+                        }
+
+                    } else {
+                        int bottomval = b.tile(x, i + 1).value();
+                        int leftval = b.tile(x - 1, i).value();
+                        int rightval = b.tile(x + 1, i).value();
+
+                        if (rightval == testval || bottomval == testval || leftval == testval) {
+                            return true;
+                        }
+
+
+                    }
+                } else if (i == 1 || i == 2) {
+                    if (x== 0){
+                        if (testval ==b.tile(x+1, i).value()){
+                            return true;
+                        }
+
+                    }
+                    else if(x == 3){
+                        if (testval == b.tile(x - 1, i).value()) {
+                            return true;
+
+                        }
+                    }
+                    else{
+                        continue;
+                    }
+
+                } else {
+                    if (x == 0) {
+                        int rightval = b.tile(x + 1, i).value();
+                        int topval = b.tile(x, i - 1).value();
+                        if (rightval == testval || topval == testval) {
+                            return true;
+                        }
+                    } else if (x == 3) {
+                        int topval = b.tile(x, i - 1).value();
+                        int leftval = b.tile(x - 1, i).value();
+                        if (leftval == testval || topval == testval) { //Only have to test bottom value or top I guess?
+                            return true;
+                        }
+
+                    } else {
+                        int topval = b.tile(x, i - 1).value();
+                        int leftval = b.tile(x - 1, i).value();
+                        int rightval = b.tile(x + 1, i).value();
+
+                        if (rightval == testval || topval == testval || leftval == testval) {
+                            return true;
+                        }
+
+                    }
+
+                }
+
+
+            }
+
+
+        }
         return false;
     }
 
