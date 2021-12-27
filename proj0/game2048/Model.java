@@ -93,7 +93,35 @@ public class Model extends Observable {
         checkGameOver();
         setChanged();
     }
-
+//    int rowup = nullUp(c, r);
+//            if (colchange == false){
+//        if (rowup != 3){
+//            if (rowup == 500){
+//                if (UpTile(c, r, this.board.tile(c, r).value())){
+//                    Tile t = board.tile(c, r);
+//                    board.move(c, r+ 1, t);
+//                    colchange = true;
+//                    //Gotta check if its already been modified also gotta edit score Prob should just write a sepearate north function
+//                }
+//            }
+//            else{
+//                if (UpTile(c, rowup, this.board.tile(c,r).value())){
+//                    Tile t = board.tile(c, r);
+//                    board.move(c, rowup + 1, t);
+//                    colchange  = true;
+//                }
+//            }
+//        }
+//        else{
+//            Tile t = board.tile(c,r);
+//            board.move(c, 3, t);
+//            colchange = true;
+//        }
+//
+//    }
+//        else{
+//
+//    }
     /** Tilt the board toward SIDE. Return true iff this changes the board.
      *
      * 1. If two Tile objects are adjacent in the direction of motion and have
@@ -109,6 +137,90 @@ public class Model extends Observable {
     public boolean tilt(Side side) {
         boolean changed;
         changed = false;
+        boolean placeholder = false;
+        int size = this.board.size() - 1;
+        // Code for North Side Move
+       // System.out.println(side == Side.NORTH);
+        if (side != Side.NORTH){
+            board.setViewingPerspective(side);
+            placeholder = true;
+        }
+            for (int c = 0; c < 4; c = c + 1) {
+                boolean change = ColumnEdit(c);
+                if (change) {
+                    changed = true;
+                }
+
+            }
+            if (placeholder){
+                board.setViewingPerspective(side.NORTH);
+            }
+//            for (int r = 2; r >= 0; r = r - 1){
+//                for (int c = 0; c < 4; c = c + 1){
+//                    if (this.board.tile(c, r) == null){
+//                        continue;
+//                    }
+//                    int[] Found = new int[4];
+//                    Found[0] = -1;
+//                    Found[1] = -1;
+//                    Found[2] = -1;
+//                    Found[3] = -1;
+//
+//
+//                    int rowup = nullUp(c, r);
+//                   // System.out.println(rowup);
+//                    if (rowup != 3){
+//                        System.out.println(checkArray(Found, r+1));
+//
+//                        if (rowup == 500){
+//                            if ((UpTile(c, r, this.board.tile(c, r).value())) && checkArray(Found, r + 1)){
+//                                int var = this.board.tile(c,r).value();
+//                                Tile t = board.tile(c, r);
+//                                board.move(c, r+ 1, t);
+//                                Found[c] = r+1;
+//                                System.out.println(c);
+//                                System.out.println("Column Edited");
+//                                changed = true;
+//                                score += (var * 2);
+//                                //Gotta check if its already been modified also gotta edit score Prob should just write a sepearate north function
+//                            }
+//                        }
+//                        else{
+//                            if ((UpTile(c, rowup, this.board.tile(c,r).value())) && checkArray(Found, rowup + 1)){
+//                                Tile t = board.tile(c, r);
+//                                int var = this.board.tile(c,r).value();
+//                                board.move(c, rowup + 1, t);
+//                                changed = true;
+//                                Found[c] = rowup + 1;
+//                                score += (var * 2);
+//                            }
+//                            else{
+//                                Tile t = board.tile(c,r);
+//                                board.move(c, rowup, t);
+//                                changed = true;
+//
+//
+//                            }
+//                        }
+//                    }
+//                    else{
+//                        Tile t = board.tile(c,r);
+//                        board.move(c, 3, t);
+//                        changed = true;
+//                    }
+//
+//                    //System.out.println(rowup);
+//                    //System.out.printf("Column: %s Row: %s",c, r);
+//                    //System.out.println(c);
+//                    //System.out.println(r);
+//
+//                }
+//
+//            }
+
+
+
+
 
         // TODO: Modify this.board (and perhaps this.score) to account
         // for the tilt to the Side SIDE. If the board changed, set the
@@ -120,6 +232,110 @@ public class Model extends Observable {
         }
         return changed;
     }
+public boolean checkArray(int[] var, int row){
+
+    for (int x = 0; x < var.length; x = x + 1){
+            //System.out.println(var[x]);
+            if (var[x] == row){
+                return false;
+            }
+
+    }
+        return true;
+}
+    //End of the code
+public boolean UpTile(int col, int row, int value){
+        return this.board.tile(col, row + 1).value() == value;
+}
+public boolean ColumnEdit(int c){
+        boolean changed = false;
+        int[] Found = new int[4];
+        Found[0] = -1;
+        Found[1] = -1;
+        Found[2] = -1;
+        Found[3] = -1;
+        for (int r = 2; r >= 0; r = r - 1){
+            if (this.board.tile(c, r) == null){
+                continue;
+            }
+
+            int rowup = nullUp(c, r);
+                // System.out.println(rowup);
+                if (rowup != 3){
+
+                    if (rowup == 500){
+                        if ((UpTile(c, r, this.board.tile(c, r).value())) && checkArray(Found, r + 1)){
+                            int var = this.board.tile(c,r).value();
+                            Tile t = board.tile(c, r);
+                            board.move(c, r+ 1, t);
+                            Found[c] = r+1;
+                            changed = true;
+                            score += (var * 2);
+                            //Gotta check if its already been modified also gotta edit score Prob should just write a sepearate north function
+                        }
+                    }
+                    else{
+                        if ((UpTile(c, rowup, this.board.tile(c,r).value())) && checkArray(Found, rowup + 1)){
+                            Tile t = board.tile(c, r);
+                            int var = this.board.tile(c,r).value();
+                            board.move(c, rowup + 1, t);
+                            changed = true;
+                            Found[c] = rowup + 1;
+                            score += (var * 2);
+                        }
+                        else{
+                            Tile t = board.tile(c,r);
+                            board.move(c, rowup, t);
+                            changed = true;
+
+
+                        }
+                    }
+                }
+                else{
+                    Tile t = board.tile(c,r);
+                    board.move(c, 3, t);
+                    changed = true;
+                }
+
+                //System.out.println(rowup);
+                //System.out.printf("Column: %s Row: %s",c, r);
+                //System.out.println(c);
+                //System.out.println(r);
+
+
+
+
+        }
+    return changed;}
+
+public int nullUp(int col, int row){
+        //int val =  this.board.tile(col, row + 1).value();
+        int track = row;
+        while (this.board.tile(col, track + 1) == null ){
+            track = track + 1;
+            if (track == 3){
+                return track;
+            }
+    }
+        if (this.board.tile(col, row + 1) == null){
+            return track;
+    }
+        else{
+            return 500;
+    }
+}
+
+
+
+//End HERE
+
+
+
+
+
+
+
 
     /** Checks if the game is over and sets the gameOver variable
      *  appropriately.
